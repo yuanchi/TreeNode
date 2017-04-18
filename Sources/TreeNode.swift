@@ -1,4 +1,4 @@
-public class TreeNode{
+open class TreeNode{
     weak var parent: TreeNode?
     var children: [TreeNode] = []
 
@@ -45,7 +45,7 @@ public class TreeNode{
       return child as! T?
     }
 
-    subscript(idx: Int...) -> TreeNode? {
+    open subscript(idx: Int...) -> TreeNode? {
       return findChildBy(idx: idx)
     }
 
@@ -65,7 +65,7 @@ public class TreeNode{
     /*
     * subclass should override this method
     */
-    public func copy() -> Self {
+    open func copy() -> Self {
       let copied = type(of: self).init()
       // TODO copy other properties; what about parent property?
       for child in children {
