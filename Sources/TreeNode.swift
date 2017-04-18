@@ -36,7 +36,7 @@ public class TreeNode{
       var child: TreeNode? = nil
       var group = children
       for i in idx {
-        guard i <= group.endIndex else {
+        guard i < group.endIndex else {
           return nil
         }
         child = group[i]

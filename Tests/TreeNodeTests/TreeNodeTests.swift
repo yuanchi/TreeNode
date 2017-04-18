@@ -37,8 +37,16 @@ class TreeNodeTests: XCTestCase {
       let c2 = SelectNode()
       let c3 = TreeNode()
       let c4 = SqlNode()
+      let c1_c1 = SelectNode()
+      let c1_c2 = TreeNode()
+      let c1_c2_c1 = SqlNode()
+      let c1_c2_c2 = TreeNode()
+      let c1_c2_c3 = SqlNode()
+      let c3_c1 = SelectNode()
+      let c3_c2 = TreeNode()
 
       _ = root.add(children: c1, c2, c3, c4)
+
       let c2Self: AnyObject = root[1]!
       let c3Self: AnyObject = root[2]! // if root is SqlNode, this downcast will fail, becuase SqlNode overrides subscript
       let c4Self: AnyObject = root[3]!
@@ -49,6 +57,15 @@ class TreeNodeTests: XCTestCase {
       XCTAssertTrue(c3Self === c3)
       XCTAssertTrue(c4Self is SqlNode)
       XCTAssertTrue(c4Self === c4)
+
+      _ = c1.add(children: c1_c1, c1_c2)
+      _ = c1_c2.add(children: c1_c2_c1, c1_c2_c2, c1_c2_c3)
+      _ = c3.add(children: c3_c1, c3_c2)
+
+      XCTAssertTrue(root[0, 1, 2] != nil)
+      XCTAssertTrue(root[0, 1, 2]! as AnyObject is SqlNode)
+      XCTAssertTrue(root[0, 2] == nil)
+      XCTAssertTrue(root[0, 2, 1] == nil)
     }
 
     func getRoot() {
