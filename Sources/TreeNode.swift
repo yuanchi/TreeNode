@@ -32,7 +32,7 @@ open class TreeNode{
       return nil
     }
 
-    func findChildBy<T: TreeNode>(idx: [Int]) -> T? {
+    public func findChildBy<T: TreeNode>(idx: [Int]) -> T? {
       var child: TreeNode? = nil
       var group = children
       for i in idx {
