@@ -1,6 +1,6 @@
 open class TreeNode{
-    weak var parent: TreeNode?
-    var children: [TreeNode] = []
+    public weak var parent: TreeNode?
+    public var children: [TreeNode] = []
 
     required public init(){} // for dynamic initialization use
 
