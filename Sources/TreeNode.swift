@@ -50,11 +50,16 @@ open class TreeNode{
     }
 
     public func getRoot<Root: TreeNode>() -> Root? {
+      let topMost = self.topMost(of: TreeNode.self)
+      return topMost as? Root
+    }
+
+    public func topMost<T: TreeNode>(of: T.Type) -> T? {
       var last = self
       while let p = last.parent {
         last = p
       }
-      return last as? Root
+      return last as? T
     }
 
     public func config(status setStatus: (_: TreeNode) ->  Void) -> Self {

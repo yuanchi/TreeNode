@@ -80,9 +80,31 @@ class TreeNodeTests: XCTestCase {
       _ = c1.add(children: c1_c1, c1_c2)
       _ = c2.add(child: c2_c1)
 
-      let rootFound: SqlNode = c2_c1.getRoot()
+      let rootFound: SqlNode = c2_c1.getRoot() as! SqlNode
       XCTAssertTrue(rootFound is SelectNode)
       XCTAssertTrue(rootFound === root)
+    }
+
+    func topMost() {
+      let root = SelectNode()
+      let c1 = SqlNode()
+      let c1_c1 = SelectNode()
+      let c1_c2 = TreeNode()
+      let c1_c2_c1 = SelectNode()
+      let c1_c2_c2 = SqlNode()
+      let c2 = SqlNode()
+      let c2_c1 = TreeNode()
+
+      _ = c1_c2.add(children: c1_c2_c1, c1_c2_c2)
+      let f1 = c1_c2_c1.topMost(of: TreeNode.self)
+      XCTAssertTrue(c1_c2 === f1)
+      _ = c1.add(children: c1_c1, c1_c2)
+      let f2 = c1_c2_c1.topMost(of: SqlNode.self)
+      XCTAssertTrue(c1 === f2)
+      _ = c2.add(child: c2_c1)
+      _ = root.add(children: c1, c2)
+      let f3 = c1_c2_c1.topMost(of: SelectNode.self)
+      XCTAssertTrue(root === f3)
     }
 
     func config() {
@@ -119,6 +141,7 @@ class TreeNodeTests: XCTestCase {
         ("subscriptGetChild", subscriptGetChild),
         ("getRoot", getRoot),
         ("config", config),
-        ("copy", copy)
+        ("copy", copy),
+        ("topMost", topMost)
     ]
 }
