@@ -66,14 +66,14 @@ open class TreeNode{
     /**
      * from self upward checking the closest element with the same type
      */
-    public func closest<T: TreeNode>(to: T.Type) -> T? {
+    public func closest<T: TreeNode>(toExact type: T.Type) -> T? {
       var last = self
-      if type(of: last) == to {
+      if type(of: last) == type {
         return last as? T
       }
       while let p = last.parent {
         last = p
-        if type(of: last) == to {
+        if type(of: last) == type {
           return last as? T
         }
       }
@@ -82,21 +82,53 @@ open class TreeNode{
     /*
     * from self upward checking the top most element with the same type
     */
-    public func topMost<T: TreeNode>(to: T.Type) -> T? {
+    public func topMost<T: TreeNode>(toExact type: T.Type) -> T? {
       var last = self
       var found: TreeNode? = nil
-      if(type(of: last) == to) {
+      if(type(of: last) == type) {
         found = last
       }
       while let p = last.parent {
-        if(type(of: p) == to) {
+        if(type(of: p) == type) {
           found = p
         }
         last = p
       }
       return found as? T
     }
-
+    /**
+     * from self upward checking the closest element whose type is subClass
+     */
+    public func closest<T: TreeNode>(to: T.Type) -> T? {
+      var last = self
+      if last is T {
+        return last as? T
+      }
+      while let p = last.parent {
+        last = p
+        if last is T {
+          return last as? T
+        }
+      }
+      return nil
+    }
+    /*
+    * from self upward checking the top most element whose type is subClass
+    */
+    public func topMost<T: TreeNode>(to: T.Type) -> T? {
+      var last = self
+      var found: TreeNode? = nil
+      if last is T {
+        found = last
+      }
+      while let p = last.parent {
+        if p is T {
+          found = p
+        }
+        last = p
+      }
+      return found as? T
+    }
     public func config(status setStatus: (_: TreeNode) ->  Void) -> Self {
       setStatus(self)
       return self
