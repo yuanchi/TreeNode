@@ -85,7 +85,29 @@ class TreeNodeTests: XCTestCase {
       XCTAssertTrue(rootFound === root)
     }
 
-    func topMost() {
+    func topMostAs() {
+      let root = SelectNode()
+      let c1 = SqlNode()
+      let c1_c1 = SelectNode()
+      let c1_c2 = TreeNode()
+      let c1_c2_c1 = SelectNode()
+      let c1_c2_c2 = SqlNode()
+      let c2 = SqlNode()
+      let c2_c1 = TreeNode()
+
+      _ = c1_c2.add(children: c1_c2_c1, c1_c2_c2)
+      let f1 = c1_c2_c1.topMost(as: TreeNode.self)
+      XCTAssertTrue(c1_c2 === f1)
+      _ = c1.add(children: c1_c1, c1_c2)
+      let f2 = c1_c2_c1.topMost(as: SqlNode.self)
+      XCTAssertTrue(c1 === f2)
+      _ = c2.add(child: c2_c1)
+      _ = root.add(children: c1, c2)
+      let f3 = c1_c2_c1.topMost(as: TreeNode.self)
+      XCTAssertTrue(root === f3)
+    }
+
+    func topMostTo() {
       let root = SelectNode()
       let c1 = SqlNode()
       let c1_c1 = SelectNode()
@@ -99,12 +121,38 @@ class TreeNodeTests: XCTestCase {
       let f1 = c1_c2_c1.topMost(to: TreeNode.self)
       XCTAssertTrue(c1_c2 === f1)
       _ = c1.add(children: c1_c1, c1_c2)
-      let f2 = c1_c2_c1.topMost(to: SqlNode.self)
-      XCTAssertTrue(c1 === f2)
+      let f2 = c1_c2_c1.topMost(to: TreeNode.self)
+      XCTAssertTrue(c1_c2 === f2)
+      XCTAssertFalse(c1 === f2)
       _ = c2.add(child: c2_c1)
       _ = root.add(children: c1, c2)
-      let f3 = c1_c2_c1.topMost(to: TreeNode.self)
+      let f3 = c1_c2_c1.topMost(to: SelectNode.self)
       XCTAssertTrue(root === f3)
+      XCTAssertFalse(c1_c2_c1 === f3)
+    }
+
+    func closest() {
+      let root = SelectNode()
+      let c1 = SqlNode()
+      let c1_c1 = SelectNode()
+      let c1_c2 = TreeNode()
+      let c1_c2_c1 = SelectNode()
+      let c1_c2_c2 = SqlNode()
+      let c2 = SqlNode()
+      let c2_c1 = TreeNode()
+
+      _ = c1_c2.add(children: c1_c2_c1, c1_c2_c2)
+      let f1 = c1_c2_c1.closest(to: TreeNode.self)
+      XCTAssertTrue(c1_c2 === f1)
+      _ = c1.add(children: c1_c1, c1_c2)
+      let f2 = c1_c2_c1.closest(to: TreeNode.self)
+      XCTAssertTrue(c1_c2 === f2)
+      XCTAssertFalse(c1 === f2)
+      _ = c2.add(child: c2_c1)
+      _ = root.add(children: c1, c2)
+      let f3 = c1_c2_c1.closest(to: SelectNode.self)
+      XCTAssertFalse(root === f3)
+      XCTAssertTrue(c1_c2_c1 === f3)
     }
 
     func config() {
@@ -142,6 +190,8 @@ class TreeNodeTests: XCTestCase {
         ("getRoot", getRoot),
         ("config", config),
         ("copy", copy),
-        ("topMost", topMost)
+        ("topMostAs", topMostAs),
+        ("topMostTo", topMostTo),
+        ("closest", closest)
     ]
 }

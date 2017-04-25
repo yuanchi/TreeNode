@@ -50,16 +50,51 @@ open class TreeNode{
     }
 
     public func getRoot<Root: TreeNode>() -> Root? {
-      let topMost = self.topMost(to: TreeNode.self)
+      let topMost = self.topMost(as: TreeNode.self)
       return topMost as? Root
     }
-
-    public func topMost<T: TreeNode>(to: T.Type) -> T? {
+    /**
+    * get the most top element of the tree, and try to downcast
+    */
+    public func topMost<T: TreeNode>(`as`: T.Type) -> T? {
       var last = self
       while let p = last.parent {
         last = p
       }
       return last as? T
+    }
+    /**
+     * from self upward checking the closest element with the same type
+     */
+    public func closest<T: TreeNode>(to: T.Type) -> T? {
+      var last = self
+      if type(of: last) == to {
+        return last as? T
+      }
+      while let p = last.parent {
+        last = p
+        if type(of: last) == to {
+          return last as? T
+        }
+      }
+      return nil
+    }
+    /*
+    * from self upward checking the top most element with the same type
+    */
+    public func topMost<T: TreeNode>(to: T.Type) -> T? {
+      var last = self
+      var found: TreeNode? = nil
+      if(type(of: last) == to) {
+        found = last
+      }
+      while let p = last.parent {
+        if(type(of: p) == to) {
+          found = p
+        }
+        last = p
+      }
+      return found as? T
     }
 
     public func config(status setStatus: (_: TreeNode) ->  Void) -> Self {
