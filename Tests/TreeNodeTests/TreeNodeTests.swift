@@ -96,14 +96,14 @@ class TreeNodeTests: XCTestCase {
       let c2_c1 = TreeNode()
 
       _ = c1_c2.add(children: c1_c2_c1, c1_c2_c2)
-      let f1 = c1_c2_c1.topMost(of: TreeNode.self)
+      let f1 = c1_c2_c1.topMost(to: TreeNode.self)
       XCTAssertTrue(c1_c2 === f1)
       _ = c1.add(children: c1_c1, c1_c2)
-      let f2 = c1_c2_c1.topMost(of: SqlNode.self)
+      let f2 = c1_c2_c1.topMost(to: SqlNode.self)
       XCTAssertTrue(c1 === f2)
       _ = c2.add(child: c2_c1)
       _ = root.add(children: c1, c2)
-      let f3 = c1_c2_c1.topMost(of: SelectNode.self)
+      let f3 = c1_c2_c1.topMost(to: TreeNode.self)
       XCTAssertTrue(root === f3)
     }
 
