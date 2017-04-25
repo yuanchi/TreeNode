@@ -49,12 +49,12 @@ open class TreeNode{
       return findChildBy(idx: idx)
     }
 
-    public func getRoot<Root: TreeNode>() -> Root {
+    public func getRoot<Root: TreeNode>() -> Root? {
       var last = self
       while let p = last.parent {
         last = p
       }
-      return last as! Root
+      return last as? Root
     }
 
     public func config(status setStatus: (_: TreeNode) ->  Void) -> Self {
