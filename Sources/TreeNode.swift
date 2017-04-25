@@ -42,7 +42,7 @@ open class TreeNode{
         child = group[i]
         group = child!.children
       }
-      return child as! T?
+      return child as? T
     }
 
     open subscript(idx: Int...) -> TreeNode? {
