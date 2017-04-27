@@ -236,6 +236,29 @@ class TreeNodeTests: XCTestCase {
       XCTAssertTrue(rootCopy[0, 0]! as AnyObject is SelectNode)
       XCTAssertFalse(rootCopy[0, 0]! === c1_c1)
     }
+
+    func findByFilter() {
+      let root = SelectNode()
+      let c1 = SqlNode()
+      let c1_c1 = SelectNode()
+      let c1_c2 = TreeNode()
+      let c1_c2_c1 = SelectNode()
+      let c1_c2_c2 = SqlNode()
+      let c2 = SqlNode()
+      let c2_c1 = TreeNode()
+
+      _ = c1_c2.add(children: c1_c2_c1, c1_c2_c2)
+      _ = c1.add(children: c1_c1, c1_c2)
+      _ = c2.add(child: c2_c1)
+      _ = root.add(children: c1, c2)
+
+      let r1 = root.find{ $0 is SqlNode }
+      XCTAssertEqual(6, r1.count)
+
+      let r2 = root.find{ type(of: $0) == SqlNode.self }
+      XCTAssertEqual(3, r2.count)
+    }
+
     static var allTests = [
         ("addThenReturnParent", addThenReturnParent),
         ("insertThenReturnChild", insertThenReturnChild),
@@ -248,6 +271,7 @@ class TreeNodeTests: XCTestCase {
         ("topMostToExact", topMostToExact),
         ("closestToExact", closestToExact),
         ("topMostTo", topMostTo),
-        ("closestTo", closestTo)
+        ("closestTo", closestTo),
+        ("findByFilter", findByFilter)
     ]
 }

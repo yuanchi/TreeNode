@@ -32,6 +32,21 @@ open class TreeNode{
       return nil
     }
 
+    func find(by filter: (_: TreeNode) -> Bool, as result: inout [TreeNode]) {
+      if filter(self) {
+          result.append(self)
+      }
+      for child in children {
+        child.find(by: filter, as: &result)
+      }
+    }
+
+    public func find(by filter: (_: TreeNode) -> Bool) -> [TreeNode] {
+      var result: [TreeNode] = []
+      find(by: filter, as: &result)
+      return result
+    }
+
     public func findChildBy<T: TreeNode>(idx: [Int]) -> T? {
       var child: TreeNode? = nil
       var group = children
