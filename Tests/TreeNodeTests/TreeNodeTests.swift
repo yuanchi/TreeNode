@@ -259,6 +259,48 @@ class TreeNodeTests: XCTestCase {
       XCTAssertEqual(3, r2.count)
     }
 
+    func removeIf() {
+      let root = SelectNode()
+      let c1 = SelectNode()
+      let c2 = SelectNode()
+      let c3 = SelectNode()
+      _ = root.add(children: c1, c2, c3)
+
+      c1.id = "aaa"
+      c2.id = "bbb"
+      c3.id = "bbb"
+
+      XCTAssertEqual(3, root.children.count)
+      _ = root.removeIf{ $0 is SelectNode && ($0 as! SelectNode).id == "bbb"}
+      XCTAssertEqual(1, root.children.count)
+      XCTAssertEqual("aaa", (root.children.last as! SelectNode).id)
+
+      root.children.removeAll()
+      let t1 = SqlNode()
+      let t2 = TreeNode()
+      let t3 = SqlNode()
+      let t1_1 = SelectNode()
+      let t1_2 = TreeNode()
+      let t1_3 = SqlNode()
+      let t1_1_1 = SelectNode()
+      let t1_1_2 = SqlNode()
+      let t1_2_1 = SelectNode()
+
+      t1_1.id = "target"
+      t1_2_1.id =  "target"
+
+      _ = root.add(children: t1, t2, t3)
+      _ = t1.add(children: t1_1, t1_2, t1_3)
+      _ = t1_1.add(children: t1_1_1, t1_1_2)
+      _ = t1_2.add(child: t1_2_1)
+
+      let r1 = root.find{ $0 is SelectNode && ($0 as! SelectNode).id == "target" }
+      XCTAssertEqual(2, r1.count)
+      _ = root.removeIf{ $0 is SelectNode && ($0 as! SelectNode).id == "target" }
+      let r2 = root.find{ $0 is SelectNode && ($0 as! SelectNode).id == "target" }
+      XCTAssertEqual(0, r2.count)
+    }
+
     static var allTests = [
         ("addThenReturnParent", addThenReturnParent),
         ("insertThenReturnChild", insertThenReturnChild),
@@ -272,6 +314,7 @@ class TreeNodeTests: XCTestCase {
         ("closestToExact", closestToExact),
         ("topMostTo", topMostTo),
         ("closestTo", closestTo),
-        ("findByFilter", findByFilter)
+        ("findByFilter", findByFilter),
+        ("removeIf", removeIf),
     ]
 }
