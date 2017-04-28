@@ -160,4 +160,26 @@ open class TreeNode{
       }
       return copied
     }
+
+    public func removeIf(matchTo filter: (_: TreeNode) -> Bool) -> Self {
+      if let p = parent {
+        guard !filter(self) else {
+          let idx = p.children.index(where: {
+            [unowned self]
+            (element: Array<TreeNode>.Iterator.Element) -> Bool in
+            return self.isEqual(to: element)
+          })! // Array.Index? => Int
+          p.children.remove(at: idx)
+          return self
+        }
+      }
+      for c in children {
+        _ = c.removeIf(matchTo: filter)
+      }
+      return self
+    }
+
+    func isEqual(to other: TreeNode) -> Bool {
+      return self === other
+    }
 }
